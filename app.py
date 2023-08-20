@@ -9,6 +9,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
+# set new engine to sqlite file
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
 
 # reflect an existing database into a new model
@@ -43,8 +44,10 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
+        f'<br>'
         f'Insert a starting date ex) 2012-04-15<br>'
         f'If you want to search between two dates then Insert a start date followed by a / and the end date<br>'
+        f'<br>'
         f"/api/v1.0/<br/>"
 
     )
