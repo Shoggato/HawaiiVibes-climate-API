@@ -21,7 +21,7 @@ Base.prepare(autoload_with=engine)
 # Save references to each table
 measurements = Base.classes.measurement
 
-stations = Base.classes.station
+station = Base.classes.station
 
 # Create our session (link) from Python to the DB
 session = Session(engine)
@@ -72,14 +72,22 @@ def precipitation():
 @app.route("/api/v1.0/stations")
 def stations():
 
-    active_stations = session.query(measurements.station).group_by(measurements.station).all()
+    active_stations = session.query(station.station,
+                                    station.name,
+                                    station.latitude,
+                                    station.longitude,
+                                    station.elevation).group_by(station.station).all()
 
     session.close()
 
     # my attempt at list comprehesion for a dictionary :3
-    stations = [{'Station': row.station} for row in active_stations]
+    stations_list = [{'Station': row[0],
+                 'Name': row[1],
+                 'Latitude': row[2],
+                 'longitude':row[3],
+                 'elevation':row[4]} for row in active_stations]
 
-    return jsonify(stations)
+    return jsonify(stations_list)
 
 @app.route("/api/v1.0/tobs")
 def tobs():
