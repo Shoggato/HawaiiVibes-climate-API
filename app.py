@@ -4,7 +4,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify
-
+import datetime as dt
 
 #################################################
 # Database Setup
@@ -54,10 +54,9 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-
+    year_ago = dt.datetime(2017, 8, 23) - dt.timedelta(days=365)
     precipitation_data = session.query(measurements.date, measurements.prcp)\
-                                .filter(measurements.date >= '2016-08-23')\
-                                .filter(measurements.date <= '2017-08-23').all()
+                                .filter(measurements.date >= year_ago).all()
 
     session.close()
 
@@ -91,10 +90,9 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def tobs():
-
+    year_ago = dt.datetime(2017, 8, 23) - dt.timedelta(days=365)
     temperature_data = session.query(measurements.station, measurements.tobs, measurements.date)\
-                                    .filter(measurements.date >= '2016-08-23')\
-                                    .filter(measurements.date <= '2017-08-23')\
+                                    .filter(measurements.date >= year_ago)\
                                     .filter(measurements.station == 'USC00519523').all()
 
     session.close()
